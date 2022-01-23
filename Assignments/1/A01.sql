@@ -10,6 +10,10 @@ BEGIN
     --Executable section begins
     curr_date := SYSDATE;
     DBMS_OUTPUT.PUT_LINE(curr_date);
+EXCEPTION
+	WHEN OTHERS THEN
+	  DBMS_OUTPUT.PUT_LINE('Error code: ' || SQLCODE);
+	  DBMS_OUTPUT.PUT_LINE('Error message: ' || SQLERRM);
 END;
 --End of block
 
@@ -20,6 +24,10 @@ Declare
 Begin
     v_counter := v_counter+1;
     DBMS_OUTPUT.PUT_LINE(v_counter);
+EXCEPTION
+	WHEN OTHERS THEN
+	  DBMS_OUTPUT.PUT_LINE('Error code: ' || SQLCODE);
+	  DBMS_OUTPUT.PUT_LINE('Error message: ' || SQLERRM);
 END;
 -- Nothing happens. There's no output.
 
@@ -29,17 +37,25 @@ Declare
 Begin
     v_counter := v_counter+1;
     DBMS_OUTPUT.PUT_LINE(v_counter);
+EXCEPTION
+	WHEN OTHERS THEN
+	  DBMS_OUTPUT.PUT_LINE('Error code: ' || SQLCODE);
+	  DBMS_OUTPUT.PUT_LINE('Error message: ' || SQLERRM);
 END;
 -- output: 301
 
 /* 4 */
 Declare 
-    v_counter Number(5) NOT NULL := 300;
+    v_counter Number(5) NOT NULL; 
 Begin
     v_counter := v_counter+1;
     DBMS_OUTPUT.PUT_LINE(v_counter);
+EXCEPTION
+	WHEN OTHERS THEN
+	  DBMS_OUTPUT.PUT_LINE('Error code: ' || SQLCODE);
+	  DBMS_OUTPUT.PUT_LINE('Error message: ' || SQLERRM);
 END;
--- output: 301
+-- output: error
 
 /* 5 */
 Declare 
@@ -47,6 +63,10 @@ Declare
 Begin
     v_counter := v_counter+1;
     DBMS_OUTPUT.PUT_LINE(v_counter);
+EXCEPTION
+	WHEN OTHERS THEN
+	  DBMS_OUTPUT.PUT_LINE('Error code: ' || SQLCODE);
+	  DBMS_OUTPUT.PUT_LINE('Error message: ' || SQLERRM);
 END;
 -- ouput: 501
 
@@ -55,6 +75,10 @@ Declare
     v_book_type VARCHAR(20) := 'fiction';
 Begin
     DBMS_OUTPUT.PUT_LINE('The book type is' || ' ' || v_book_type);
+EXCEPTION
+	WHEN OTHERS THEN
+	  DBMS_OUTPUT.PUT_LINE('Error code: ' || SQLCODE);
+	  DBMS_OUTPUT.PUT_LINE('Error message: ' || SQLERRM);
 END;
 
 /* 7 */
@@ -63,6 +87,10 @@ Declare
 Begin
     v_text := 'PL/SQL is easy'; 
     DBMS_OUTPUT.PUT_LINE(v_text);
+EXCEPTION
+	WHEN OTHERS THEN
+	  DBMS_OUTPUT.PUT_LINE('Error code: ' || SQLCODE);
+	  DBMS_OUTPUT.PUT_LINE('Error message: ' || SQLERRM);
 END;
 
 /* 8 */
@@ -70,6 +98,10 @@ Declare
     v_date Date := '2025-01-31';
 Begin
     DBMS_OUTPUT.PUT_LINE('The test date is' || ' ' || v_date);
+EXCEPTION
+	WHEN OTHERS THEN
+	  DBMS_OUTPUT.PUT_LINE('Error code: ' || SQLCODE);
+	  DBMS_OUTPUT.PUT_LINE('Error message: ' || SQLERRM);
 END;
 
 /* 9 */
@@ -77,6 +109,10 @@ Declare
     v_today Date := SYSDATE;
 Begin
     DBMS_OUTPUT.PUT_LINE('Today is' || ' ' || v_today);
+EXCEPTION
+	WHEN OTHERS THEN
+	  DBMS_OUTPUT.PUT_LINE('Error code: ' || SQLCODE);
+	  DBMS_OUTPUT.PUT_LINE('Error message: ' || SQLERRM);
 END;
 
 /* 10 */
@@ -84,6 +120,10 @@ Declare
     v_default_date Date DEFAULT SYSDATE;
 Begin
     DBMS_OUTPUT.PUT_LINE('The default date is' || ' ' || v_default_date);
+EXCEPTION
+	WHEN OTHERS THEN
+	  DBMS_OUTPUT.PUT_LINE('Error code: ' || SQLCODE);
+	  DBMS_OUTPUT.PUT_LINE('Error message: ' || SQLERRM);
 END;
 
 /* 11 */
@@ -91,6 +131,10 @@ Declare
     TAX_RATE CONSTANT Number(5,2) := 0.13;
 Begin
     DBMS_OUTPUT.PUT_LINE('The tax rate is' || ' ' || TAX_RATE*100 || ' percent');
+EXCEPTION
+	WHEN OTHERS THEN
+	  DBMS_OUTPUT.PUT_LINE('Error code: ' || SQLCODE);
+	  DBMS_OUTPUT.PUT_LINE('Error message: ' || SQLERRM);
 END;
 
 /* 12 */
@@ -99,6 +143,10 @@ DECLARE
     CONSTANT1 CONSTANT NUMBER := 5;
 BEGIN
     DBMS_OUTPUT.PUT_LINE('The value is ' || CONSTANT1);
+EXCEPTION
+	WHEN OTHERS THEN
+	  DBMS_OUTPUT.PUT_LINE('Error code: ' || SQLCODE);
+	  DBMS_OUTPUT.PUT_LINE('Error message: ' || SQLERRM);
 END;
 
 /* 13 */
@@ -107,6 +155,10 @@ DECLARE
 BEGIN
     v_myname := 'Mahmud';
     DBMS_OUTPUT.PUT_LINE('My name is ' || v_myname);
+EXCEPTION
+	WHEN OTHERS THEN
+	  DBMS_OUTPUT.PUT_LINE('Error code: ' || SQLCODE);
+	  DBMS_OUTPUT.PUT_LINE('Error message: ' || SQLERRM);
 END;
 
 /* 14 */
@@ -117,4 +169,8 @@ DECLARE
 BEGIN
     v_tax_amount := v_total_amount * TAX_RATE;
     DBMS_OUTPUT.PUT_LINE(v_tax_amount);
+EXCEPTION
+	WHEN OTHERS THEN
+	  DBMS_OUTPUT.PUT_LINE('Error code: ' || SQLCODE);
+	  DBMS_OUTPUT.PUT_LINE('Error message: ' || SQLERRM);
 END;
