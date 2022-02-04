@@ -12,27 +12,26 @@ BEGIN
     v_loan_payment := :ENTER_LOAN_PAYMENT;
     v_equal_payment := v_loan_amount/v_loan_payment;
     
-    DBMS_OUTPUT.PUT_LINE('Loan Amount: ' || TRIM(TO_CHAR(v_loan_amount,'$9,999.99')));
-    DBMS_OUTPUT.PUT_LINE('Loan Payment: ' || TRIM(TO_CHAR(v_loan_payment,'$9,999.99')));
-    DBMS_OUTPUT.PUT_LINE('Equal Payments: ' || TRIM(TO_CHAR(v_equal_payment,'99999')));
-    DBMS_OUTPUT.PUT_LINE('');
+    DBMS_OUTPUT.PUT_LINE('Loan Amount: ' || TO_CHAR(v_loan_amount,'FM$9,999.99'));
+    DBMS_OUTPUT.PUT_LINE('Loan Payment: ' || TO_CHAR(v_loan_payment,'FM$9,999.99'));
+    DBMS_OUTPUT.PUT_LINE('Equal Payments: ' || TO_CHAR(v_equal_payment,'FM99999'));
+    DBMS_OUTPUT.NEW_LINE;
     DBMS_OUTPUT.PUT_LINE(v_h1);
     DBMS_OUTPUT.PUT_LINE(v_h2); 
     
     LOOP
         v_loan_amount := v_loan_amount - v_loan_payment;
         v_month := v_month+1;
-        DBMS_OUTPUT.PUT_LINE(v_month || '    ' || TRIM(TO_CHAR(v_loan_amount, '9,999.99'))); 
+        DBMS_OUTPUT.PUT_LINE(v_month || '         ' || TO_CHAR(v_loan_amount, '9,999.99')); 
     EXIT WHEN v_loan_amount < v_loan_payment;
     END LOOP; 
-        DBMS_OUTPUT.PUT_LINE('Outstanding balance: ' || TRIM(TO_CHAR(v_loan_amount, '$9,999.99'))); 
+        DBMS_OUTPUT.PUT_LINE('Outstanding balance: ' || TO_CHAR(v_loan_amount, 'FM$9,999.00')); 
 
 EXCEPTION
 	WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error code: ' || SQLCODE);
         DBMS_OUTPUT.PUT_LINE('Error message: ' || SQLERRM);
 END;
-
 
 
 /* 6 */
@@ -52,6 +51,9 @@ DECLARE
     v_i STRING(20) := 'Individual';
     v_b STRING(50) := 'Business organization';
     v_g STRING(20) := 'Grant funds';
+    v_individual STRING(5) := 'I';
+    v_business STRING(5) := 'B';
+    v_grants STRING(5) := 'G';
 
 BEGIN
     SELECT *
@@ -60,42 +62,37 @@ BEGIN
     WHERE v_donor_id = DONOR_ID;
 
     v_pledge_amount := v_donor_info.pledge_months * v_donor_info.monthly_pledge_amount;
-
-    v_donor_type := 
+ 
     CASE v_donor_info.DONOR_TYPE
-    WHEN 'I' THEN v_i
-    WHEN 'B' THEN v_b
-    WHEN 'G' THEN v_g
-    END;
-
-    v_matching :=
-    CASE v_donor_info.DONOR_TYPE
-    WHEN 'I' THEN 
-        (CASE 
-        WHEN v_pledge_amount  >= 500 THEN v_twenty
-        WHEN v_pledge_amount  >= 250 THEN v_thirty
-        WHEN v_pledge_amount  >= 100 THEN v_fifty
-        WHEN v_pledge_amount  < 100 THEN v_zero
-        END)
-    WHEN 'B' THEN 
-        (CASE 
-        WHEN v_pledge_amount  >= 1000 THEN v_five
-        WHEN v_pledge_amount  >= 500 THEN v_ten
-        WHEN v_pledge_amount  >= 100 THEN v_twenty
-        WHEN v_pledge_amount  < 100 THEN v_zero
-        END)
-    WHEN 'G' THEN 
-        (CASE 
-        WHEN v_pledge_amount  >= 100 THEN v_five
-        WHEN v_pledge_amount  < 100 THEN v_zero
-        END)
-    END;
+        WHEN v_individual THEN 
+            v_donor_type := v_i;
+            CASE 
+                WHEN v_pledge_amount  >= 500 THEN v_matching := v_twenty;
+                WHEN v_pledge_amount  >= 250 THEN v_matching := v_thirty;
+                WHEN v_pledge_amount  >= 100 THEN v_matching := v_fifty;
+                WHEN v_pledge_amount  < 100 THEN v_matching := v_zero;
+            END CASE;
+        WHEN v_business THEN 
+            v_donor_type := v_b;
+            CASE 
+                WHEN v_pledge_amount  >= 1000 THEN v_matching := v_five;
+                WHEN v_pledge_amount  >= 500 THEN v_matching := v_ten;
+                WHEN v_pledge_amount  >= 100 THEN v_matching := v_twenty;
+                WHEN v_pledge_amount  < 100 THEN v_matching := v_zero;
+            END CASE;
+        WHEN v_grants THEN 
+            v_donor_type := v_g;
+            CASE 
+                WHEN v_pledge_amount  >= 100 THEN v_matching := v_five;
+                WHEN v_pledge_amount  < 100 THEN v_matching := v_zero;
+            END CASE;
+    END CASE;
     
     v_match_amount := CEIL(v_pledge_amount * (v_matching/100));
     DBMS_OUTPUT.PUT_LINE('Donor pledge for ' || v_donor_info.donor_name);
     DBMS_OUTPUT.PUT_LINE('Donor type: ' || v_donor_type);
-    DBMS_OUTPUT.PUT_LINE('Amount pledged: ' || TO_CHAR(v_pledge_amount, '$9999.99'));
-    DBMS_OUTPUT.PUT_LINE('Match amount: ' || TO_CHAR(v_match_amount, '$9999.99'));
+    DBMS_OUTPUT.PUT_LINE('Amount pledged: ' || TO_CHAR(v_pledge_amount, 'FM$9999.99'));
+    DBMS_OUTPUT.PUT_LINE('Match amount: ' || TO_CHAR(v_match_amount, 'FM$9999.99'));
 EXCEPTION
 	WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error code: ' || SQLCODE);
