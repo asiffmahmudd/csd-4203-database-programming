@@ -144,6 +144,38 @@ EXCEPTION
 END;
 
 
-
-
 /********** 4 ***********/
+
+CREATE OR REPLACE PROCEDURE GET_GRADE
+    (p_section_id IN GL_ENROLLMENTS_COPY.section_id%TYPE,
+    p_student_no IN GL_ENROLLMENTS_COPY.student_no%TYPE,
+    p_numeric_grade OUT GL_ENROLLMENTS_COPY.numeric_grade%TYPE,
+    p__letter_grade OUT GL_ENROLLMENTS_COPY.LETTER_GRADE%TYPE)
+IS
+BEGIN
+    SELECT numeric_grade, letter_grade
+    INTO p_numeric_grade, p__letter_grade
+    FROM GL_ENROLLMENTS_COPY
+    WHERE student_no = p_student_no AND section_id = p_section_id;
+END GET_GRADE;
+
+
+DECLARE
+    v_section_id GL_ENROLLMENTS_COPY.student_no%TYPE := :ENTER_SECTION_ID;
+    v_student_no GL_ENROLLMENTS_COPY.section_id%TYPE := :ENTER_STUDENT_NO;
+    v_numeric_grade GL_ENROLLMENTS_COPY.numeric_grade%TYPE;
+    v_letter_grade GL_ENROLLMENTS_COPY.LETTER_GRADE%TYPE;
+BEGIN
+    GET_GRADE(v_section_id, v_student_no, v_numeric_grade, v_letter_grade);
+	
+    DBMS_OUTPUT.PUT_LINE('Student: ' || v_student_no);
+    DBMS_OUTPUT.PUT_LINE('Section: ' || v_section_id);
+    DBMS_OUTPUT.PUT_LINE('Numeric grade: ' || COALESCE(TO_CHAR(v_numeric_grade, '999'), 'NG'));
+    DBMS_OUTPUT.PUT_LINE('Letter grade: ' || COALESCE(v_letter_grade, 'NG'));
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Student ' || v_student_no || ' Section: ' || v_section_id || ' not found');
+	WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error code: ' || SQLCODE);
+        DBMS_OUTPUT.PUT_LINE('Error message: ' || SQLERRM);
+END;
