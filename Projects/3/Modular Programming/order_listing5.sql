@@ -7,8 +7,8 @@ CREATE OR REPLACE PROCEDURE order_listing_5 IS
   PROCEDURE L3_break;
 
   CURSOR orders_cursor IS
-         SELECT  *  FROM cbv1  
-         ORDER BY cust_state, cust_city, customer_id, order_id;
+	 SELECT  *  FROM cbv1  
+	 ORDER BY cust_state, cust_city, customer_id, order_id;
   orders_rec  orders_cursor%ROWTYPE;
 
   hold_state        c6_orders.cust_state%TYPE;
